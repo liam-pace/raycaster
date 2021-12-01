@@ -1,9 +1,21 @@
 from math import sqrt
 from geometry import *
 
-def test_vector_improper_constructor():
-    try: v = Vector2D("False", "True"); assert False; v = Vector2D(False, True); assert False; v = Vector2D([], []); assert False; v = Vector2D({}, {}); assert False
-    except TypeError: assert True
+TYPE_VALUES = [list(), set(), dict(), "Hello World!", False]
+
+
+
+
+# VECTOR2D CLASS
+
+def test_vector_invalid_constructor():
+    try:
+        for value in TYPE_VALUES:
+            _ = Vector2D(value, value)
+            print("CONSTRUCTOR Failed To Enforce With Type: ", type(value))
+            assert False
+    except TypeError:
+        assert True
 
 def test_vector_equality():
     v = Vector2D(1,2)
@@ -23,15 +35,22 @@ def test_vector_setters():
     assert v.X() == 10
     assert v.Y() == 20
 
-def test_vector_improper_setters():
-    try: v = Vector2D(1,2); v.X("Hello World"); assert False; v = Vector2D(1,2); v.Y("Hello World"); assert False; v = Vector2D(1,2); v.X(False); assert False; v = Vector2D(1,2); v.Y(True); assert False; v = Vector2D(1,2); v.X([]); assert False; v = Vector2D(1,2); v.Y([]); assert False; v = Vector2D(1,2); v.X({}); assert False; v = Vector2D(1,2); v.Y({}); assert False
-    except TypeError: assert True
+def test_vector_invalid_setters():
+    v = Vector2D(0,0)
+    try:
+        for value in TYPE_VALUES:
+            v.X(value)
+            print("X POSITION Failed To Enforce With Type: ", type(value))
+            v.Y(value)
+            print("Y POSITION Failed To Enforce With Type: ", type(value))
+            assert False
+    except TypeError:
+        assert True
 
 def test_vector_operators():
     v = Vector2D(1,1)
     v2 = Vector2D(2,2)
     norms = v | v2
-
     assert (v + v2) == Vector2D(3,3)
     assert (v - v2) == Vector2D(-1,-1)
     assert (v * v2) == Vector2D(2,2)
@@ -40,3 +59,67 @@ def test_vector_operators():
     assert (v ^ v2) == 4
     assert norms[0] == Vector2D(-1/sqrt(2), 1/sqrt(2))
     assert norms[1] == Vector2D(1/sqrt(2), -1/sqrt(2))
+
+
+
+
+# TRANSFORM CLASS
+
+def test_transform_invalid():
+    try:
+        for value in TYPE_VALUES:
+            _ = Transform(value, value, value)
+            print("CONSTRUCTOR Failed To Enforce With Type: ", type(value))
+            assert False
+    except TypeError:
+        assert True
+
+def test_transform_equality():
+    t1 = Transform(Vector2D(10,10), 0, Vector2D(10,10))
+    t2 = Transform(Vector2D(20,20), 0, Vector2D(10,10))
+    t3 = Transform(Vector2D(10,10), 0, Vector2D(20,20))
+    t4 = Transform(Vector2D(20,20), 0, Vector2D(20,20))
+    t5 = Transform(Vector2D(10,10), 0, Vector2D(10,10))
+
+    assert (t1 == t2) == False
+    assert (t1 == t3) == False
+    assert (t1 == t4) == False
+    assert (t1 == t5) == True
+
+def test_transform_getters():
+    t = Transform(Vector2D(0,0), 0, Vector2D(1,1))
+    assert t.Position() == Vector2D(0,0)
+    assert t.Rotation() == 0
+    assert t.Scale() == Vector2D(1,1)
+
+def test_transform_setters():
+    t = Transform(Vector2D(0,0), 0, Vector2D(1,1))
+    t.Position(Vector2D(1,1))
+    t.Rotation(5)
+    t.Scale(Vector2D(10,10))
+    assert t.Position() == Vector2D(1,1)
+    assert t.Rotation() == 5
+    assert t.Scale() == Vector2D(10,10)
+
+def test_transform_invalid_setters():
+    t = Transform(Vector2D(0,0), 0, Vector2D(0,0))
+    try:
+        for value in TYPE_VALUES:
+            t.Rotation(value)
+            print("ROTATION Failed To Enforce With Type: ", type(value))
+            t.Position(value)
+            print("POSITION Failed To Enforce With Type: ", type(value))
+            t.Scale(value)
+            print("SCALE Failed To Enforce With Type: ", type(value))
+            assert False
+    except TypeError:
+        assert True
+
+def test_transform_operators():
+    t1 = Transform(Vector2D(0,0), 0, Vector2D(1,1))
+    t2 = Transform(Vector2D(10,10), 90, Vector2D(5,5))
+    t3 = Transform(Vector2D(-5, 40), -45, Vector2D(0.5,0.5))
+    assert (t1 * t2) == t2
+    assert (t2 * t1) == t2
+    assert (t2 * t3) == Transform(Vector2D(5, 50), 45, Vector2D(2.5,2.5))
+    assert (t3 * t2) == Transform(Vector2D(5, 50), 45, Vector2D(2.5,2.5))

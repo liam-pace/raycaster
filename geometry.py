@@ -151,9 +151,13 @@ class Transform:
         if isinstance(position, Vector2D) and isinstance(rotation, number_types) and isinstance(scale, Vector2D):self.Position(position);self.Rotation(rotation);self.Scale(scale)
         else:raise TypeError
 
+    def __eq__(self, o) -> bool:
+        if isinstance(o, Transform): return self.__position == o.__position and self.__rotation == o.__rotation and self.__scale == o.__scale
+        else: return False
+
     def __mul__(self,o):
         if isinstance(o, Transform): return Transform(self.__position + o.__position, self.__rotation + o.__rotation, self.__scale * o.__scale)
-        elif isinstance(o, Vector2D): scaled = o * self.__scale; trigg = Vector2D.Angle(self.__rotation); triggedA = scaled * trigg; triggedB = scaled * Vector2D(trigg.__y, trigg.__x); rotated = Vector2D(triggedA.__x - triggedA.__y, triggedB.__x + triggedB.__y); return rotated + self.__position
+        # elif isinstance(o, Vector2D): scaled = o * self.__scale; trigg = Vector2D.Angle(self.__rotation); triggedA = scaled * trigg; triggedB = scaled * Vector2D(trigg.__y, trigg.__x); rotated = Vector2D(triggedA.__x - triggedA.__y, triggedB.__x + triggedB.__y); return rotated + self.__position
         else: raise TypeError
 
     def Position(self, position=None):
