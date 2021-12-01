@@ -7,14 +7,9 @@ class Vector2D:
     Constructs A Vector Object
     """
     def __init__(self, x, y) -> None:
-        self.__x = x
-        self.__y = y
+        if isinstance(x, (float, int, complex)) and isinstance(y, (float, int, complex)): self.__x = x; self.__y = y
+        else: raise TypeError
 
-    """
-        Returns the length of the vector
-    """
-    def mag(self):
-        return math.sqrt(self^self)
 
     """
     Operator:   Equals
@@ -91,16 +86,6 @@ class Vector2D:
         else: raise TypeError
 
     """
-    Operator:   Bitwise OR
-    Symbol:     |
-    Purpose:
-        Provides The Normals Between The Line Formed By Two Vectors
-    """
-    def __or__(self, o):
-        if isinstance(o, Vector2D): diff = o - self; return (Vector2D(-diff.__y, diff.__x), Vector2D(diff.__y, -diff.__x))
-        else: raise TypeError
-
-    """
     Operator:   Bitwise XOR
     Symbol:     ^
     Purpose:
@@ -116,5 +101,37 @@ class Vector2D:
     Purpose:
         Normalizes The Current Vector Into A Unit Vector
     """
-    def __inverse__(self):
-        return self / self.mag()
+    def __invert__(self):
+        return self / self.Mag()
+
+    """
+    Operator:   Bitwise OR
+    Symbol:     |
+    Purpose:
+        Provides The Normals Between The Line Formed By Two Vectors
+    """
+    def __or__(self, o):
+        if isinstance(o, Vector2D): diff = o - self; return (~Vector2D(-diff.__y, diff.__x), ~Vector2D(diff.__y, -diff.__x))
+        else: raise TypeError
+
+    """
+    Sets or Returns The X Value Of This Vector
+    """
+    def X(self, x=None):
+        if x == None: return self.__x
+        elif isinstance(x, (float, int, complex)): self.__x = x
+        else: raise TypeError
+
+    """
+    Sets or Returns The Y Value Of This Vector
+    """
+    def Y(self, y=None):
+        if y == None: return self.__y
+        elif isinstance(y, (float, int, complex)): self.__y = y
+        else: raise TypeError
+
+    """
+    Returns The Length Of This Vector
+    """
+    def Mag(self):
+        return math.sqrt(self^self)
