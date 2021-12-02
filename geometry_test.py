@@ -68,18 +68,18 @@ def test_vector_operators():
 def test_transform_invalid():
     try:
         for value in TYPE_VALUES:
-            _ = Transform(value, value, value)
+            _ = Transform2D(value, value, value)
             print("CONSTRUCTOR Failed To Enforce With Type: ", type(value))
             assert False
     except TypeError:
         assert True
 
 def test_transform_equality():
-    t1 = Transform(Vector2D(10,10), 0, Vector2D(10,10))
-    t2 = Transform(Vector2D(20,20), 0, Vector2D(10,10))
-    t3 = Transform(Vector2D(10,10), 0, Vector2D(20,20))
-    t4 = Transform(Vector2D(20,20), 0, Vector2D(20,20))
-    t5 = Transform(Vector2D(10,10), 0, Vector2D(10,10))
+    t1 = Transform2D(Vector2D(10,10), 0, Vector2D(10,10))
+    t2 = Transform2D(Vector2D(20,20), 0, Vector2D(10,10))
+    t3 = Transform2D(Vector2D(10,10), 0, Vector2D(20,20))
+    t4 = Transform2D(Vector2D(20,20), 0, Vector2D(20,20))
+    t5 = Transform2D(Vector2D(10,10), 0, Vector2D(10,10))
 
     assert (t1 == t2) == False
     assert (t1 == t3) == False
@@ -87,13 +87,13 @@ def test_transform_equality():
     assert (t1 == t5) == True
 
 def test_transform_getters():
-    t = Transform(Vector2D(0,0), 0, Vector2D(1,1))
+    t = Transform2D(Vector2D(0,0), 0, Vector2D(1,1))
     assert t.Position() == Vector2D(0,0)
     assert t.Rotation() == 0
     assert t.Scale() == Vector2D(1,1)
 
 def test_transform_setters():
-    t = Transform(Vector2D(0,0), 0, Vector2D(1,1))
+    t = Transform2D(Vector2D(0,0), 0, Vector2D(1,1))
     t.Position(Vector2D(1,1))
     t.Rotation(5)
     t.Scale(Vector2D(10,10))
@@ -102,7 +102,7 @@ def test_transform_setters():
     assert t.Scale() == Vector2D(10,10)
 
 def test_transform_invalid_setters():
-    t = Transform(Vector2D(0,0), 0, Vector2D(0,0))
+    t = Transform2D(Vector2D(0,0), 0, Vector2D(0,0))
     try:
         for value in TYPE_VALUES:
             t.Rotation(value)
@@ -116,17 +116,17 @@ def test_transform_invalid_setters():
         assert True
 
 def test_transform_operators():
-    t1 = Transform(Vector2D(0,0), 0, Vector2D(1,1))
-    t2 = Transform(Vector2D(10,10), 90, Vector2D(5,5))
-    t3 = Transform(Vector2D(-5, 40), -45, Vector2D(0.5,0.5))
+    t1 = Transform2D(Vector2D(0,0), 0, Vector2D(1,1))
+    t2 = Transform2D(Vector2D(10,10), 90, Vector2D(5,5))
+    t3 = Transform2D(Vector2D(-5, 40), -45, Vector2D(0.5,0.5))
     assert (t1 * t2) == t2
     assert (t2 * t1) == t2
-    assert (t2 * t3) == Transform(Vector2D(5, 50), 45, Vector2D(2.5,2.5))
-    assert (t3 * t2) == Transform(Vector2D(5, 50), 45, Vector2D(2.5,2.5))
+    assert (t2 * t3) == Transform2D(Vector2D(5, 50), 45, Vector2D(2.5,2.5))
+    assert (t3 * t2) == Transform2D(Vector2D(5, 50), 45, Vector2D(2.5,2.5))
 
 def test_transform_vector():
     v = Vector2D(2,2)
-    t = Transform(Vector2D(10,10), 45, Vector2D(5,5))
+    t = Transform2D(Vector2D(10,10), 45, Vector2D(5,5))
     c = math.cos(radians(45))
     s = math.sin(radians(45))
     result = v * t

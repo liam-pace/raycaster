@@ -72,19 +72,7 @@ class Vector2D:
     def __mul__(self, o):
         if isinstance(o, Vector2D):return Vector2D(self.__x*o.__x, self.__y*o.__y)
         elif isinstance(o, number_types):return Vector2D(self.__x*o, self.__y*o)
-        elif isinstance(o, Transform):
-            scale = o.Scale()
-            rot = o.Rotation()
-            pos = o.Position()
-            trig = Vector2D.Angle(rot)
-            scaled = self * scale
-            rotated = Vector2D(scaled.__x*trig.__x-scaled.__y*trig.__y,scaled.__x*trig.__y+scaled.__y*trig.__x)
-            translated = rotated + pos
-            print(rot, trig)
-            print(scaled)
-            print(rotated)
-            print(translated)
-            return translated
+        elif isinstance(o, Transform2D):trig = Vector2D.Angle(o.Rotation()); scaled = self * o.Scale(); rotated = Vector2D(scaled.__x*trig.__x-scaled.__y*trig.__y,scaled.__x*trig.__y+scaled.__y*trig.__x); return rotated + o.Position()
         else:raise TypeError
     
     """
@@ -168,7 +156,7 @@ class Vector2D:
         return Vector2D(math.cos(math.radians(degs)), math.sin(math.radians(degs)))
 
 
-class Transform:
+class Transform2D:
     """
     Determines The Fields For This Class
     """
@@ -188,7 +176,7 @@ class Transform:
         Determines If Two Transforms Are Equal
     """
     def __eq__(self, o):
-        if isinstance(o, Transform): return self.__position == o.__position and self.__rotation == o.__rotation and self.__scale == o.__scale
+        if isinstance(o, Transform2D): return self.__position == o.__position and self.__rotation == o.__rotation and self.__scale == o.__scale
         else: return False
 
     """
