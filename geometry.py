@@ -8,7 +8,7 @@ class Vector2D:
     """
     Constructs A Vector Object
     """
-    def __init__(self, x, y) -> None:
+    def __init__(self, x, y):
         if isinstance(x, number_types) and isinstance(y, number_types):self.__x = x;self.__y = y
         else:raise TypeError
 
@@ -30,7 +30,13 @@ class Vector2D:
         Reflects The Vector Over The X and Y Axis
     """
     def __neg__(self):
-        return Vector2D(-self.__x, -self.__y) 
+        return Vector2D(-self.__x, -self.__y)
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return "(%s, %s)" % (str(self.__x), str(self.__y))
 
     """
     Operator:  Addition
@@ -63,6 +69,19 @@ class Vector2D:
     def __mul__(self, o):
         if isinstance(o, Vector2D):return Vector2D(self.__x*o.__x, self.__y*o.__y)
         elif isinstance(o, number_types):return Vector2D(self.__x*o, self.__y*o)
+        elif isinstance(o, Transform):
+            scale = o.Scale()
+            rot = o.Rotation()
+            pos = o.Position()
+            trig = Vector2D.Angle(rot)
+            scaled = self * scale
+            rotated = Vector2D(scaled.__x*trig.__x-scaled.__y*trig.__y,scaled.__x*trig.__y+scaled.__y*trig.__x)
+            translated = rotated + pos
+            print(rot, trig)
+            print(scaled)
+            print(rotated)
+            print(translated)
+            return translated
         else:raise TypeError
     
     """
@@ -138,27 +157,34 @@ class Vector2D:
     def Mag(self):
         return math.sqrt(self^self)
 
+    """
+    Returns A Unit Vector Based On An Angle (measured in degrees) Provided
+    """
     @staticmethod
     def Angle(degs):
-        rads = math.radians(degs)
-        return Vector2D(math.cos(rads), math.sin(degs))
+        return Vector2D(math.cos(math.radians(degs)), math.sin(math.radians(degs)))
 
 
 class Transform:
     __slots__ = ["__position", "__rotation", "__scale"]
     
-    def __init__(self, position, rotation, scale) -> None:
+    def __init__(self, position, rotation, scale):
         if isinstance(position, Vector2D) and isinstance(rotation, number_types) and isinstance(scale, Vector2D):self.Position(position);self.Rotation(rotation);self.Scale(scale)
         else:raise TypeError
 
-    def __eq__(self, o) -> bool:
+    def __eq__(self, o):
         if isinstance(o, Transform): return self.__position == o.__position and self.__rotation == o.__rotation and self.__scale == o.__scale
         else: return False
 
     def __mul__(self,o):
         if isinstance(o, Transform): return Transform(self.__position + o.__position, self.__rotation + o.__rotation, self.__scale * o.__scale)
-        # elif isinstance(o, Vector2D): scaled = o * self.__scale; trigg = Vector2D.Angle(self.__rotation); triggedA = scaled * trigg; triggedB = scaled * Vector2D(trigg.__y, trigg.__x); rotated = Vector2D(triggedA.__x - triggedA.__y, triggedB.__x + triggedB.__y); return rotated + self.__position
         else: raise TypeError
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return "{ %s, %s, %s }" % (str(self.__position), str(self.__rotation), str(self.__scale))
 
     def Position(self, position=None):
         if position==None:return self.__position

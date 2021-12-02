@@ -1,4 +1,4 @@
-from math import sqrt
+from math import radians, sqrt
 from geometry import *
 
 TYPE_VALUES = [list(), set(), dict(), "Hello World!", False]
@@ -123,3 +123,12 @@ def test_transform_operators():
     assert (t2 * t1) == t2
     assert (t2 * t3) == Transform(Vector2D(5, 50), 45, Vector2D(2.5,2.5))
     assert (t3 * t2) == Transform(Vector2D(5, 50), 45, Vector2D(2.5,2.5))
+
+def test_transform_vector():
+    v = Vector2D(2,2)
+    t = Transform(Vector2D(10,10), 45, Vector2D(5,5))
+    c = math.cos(radians(45))
+    s = math.sin(radians(45))
+    result = v * t
+    expected = Vector2D((2*5)*c-(2*5)*s + 10,(2*5)*s+(2*5)*c + 10)
+    assert result == expected 
