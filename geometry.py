@@ -3,10 +3,13 @@ import math
 number_types = (float, int, complex)
 
 class Vector2D:
+    """
+    Determines The Fields For This Class
+    """
     __slots__ = ["__x", "__y"]
 
     """
-    Constructs A Vector Object
+    Constructs A New Vector Object
     """
     def __init__(self, x, y):
         if isinstance(x, number_types) and isinstance(y, number_types):self.__x = x;self.__y = y
@@ -166,36 +169,59 @@ class Vector2D:
 
 
 class Transform:
+    """
+    Determines The Fields For This Class
+    """
     __slots__ = ["__position", "__rotation", "__scale"]
     
+    """
+    Constructs A New Transform Object
+    """
     def __init__(self, position, rotation, scale):
         if isinstance(position, Vector2D) and isinstance(rotation, number_types) and isinstance(scale, Vector2D):self.Position(position);self.Rotation(rotation);self.Scale(scale)
         else:raise TypeError
 
+    """
+    Operator:  Equals
+    Symbol:    ==
+    Purpose:
+        Determines If Two Transforms Are Equal
+    """
     def __eq__(self, o):
         if isinstance(o, Transform): return self.__position == o.__position and self.__rotation == o.__rotation and self.__scale == o.__scale
         else: return False
 
-    def __mul__(self,o):
-        if isinstance(o, Transform): return Transform(self.__position + o.__position, self.__rotation + o.__rotation, self.__scale * o.__scale)
-        else: raise TypeError
-
+    """
+    String Representation Of This Object
+    """
     def __repr__(self):
         return self.__str__()
-
+    
+    """
+    String Representation Of This Object
+    """
     def __str__(self):
         return "{ %s, %s, %s }" % (str(self.__position), str(self.__rotation), str(self.__scale))
 
+    """
+    Sets or Gets The Transforms Position
+    """
     def Position(self, position=None):
         if position==None:return self.__position
         elif isinstance(position, Vector2D):self.__position = position
         else:raise TypeError
 
+    """
+    Sets or Gets The Transforms Rotation
+    """
     def Rotation(self, rotation=None):
         if rotation==None:return self.__rotation
         elif isinstance(rotation, number_types):self.__rotation = rotation
         else:raise TypeError
 
+    """
+    Sets or Gets The Transforms Scale
+    """
     def Scale(self, scale=None):
         if scale==None:return self.__scale
         elif isinstance(scale, Vector2D):self.__scale = scale
