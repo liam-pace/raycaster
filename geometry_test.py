@@ -115,15 +115,6 @@ def test_transform_invalid_setters():
     except TypeError:
         assert True
 
-def test_transform_operators():
-    t1 = Transform2D(Vector2D(0,0), 0, Vector2D(1,1))
-    t2 = Transform2D(Vector2D(10,10), 90, Vector2D(5,5))
-    t3 = Transform2D(Vector2D(-5, 40), -45, Vector2D(0.5,0.5))
-    assert (t1 * t2) == t2
-    assert (t2 * t1) == t2
-    assert (t2 * t3) == Transform2D(Vector2D(5, 50), 45, Vector2D(2.5,2.5))
-    assert (t3 * t2) == Transform2D(Vector2D(5, 50), 45, Vector2D(2.5,2.5))
-
 def test_transform_vector():
     v = Vector2D(2,2)
     t = Transform2D(Vector2D(10,10), 45, Vector2D(5,5))
